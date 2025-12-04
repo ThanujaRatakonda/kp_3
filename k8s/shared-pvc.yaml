@@ -4,7 +4,7 @@ metadata:
   name: shared-pvc
 spec:
   accessModes:
-    - ReadWriteOnce  # Ensure this matches the PV's access mode
+    - ReadWriteMany
   resources:
     requests:
       storage: 1Gi 
