@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: shared-pvc
 spec:
-  storageClassName: shared-storage  # Reference the StorageClass
+  storageClassName: shared-storage 
   accessModes:
-    - ReadWriteMany  # Allow multiple pods to use the same PVC
+    - ReadWriteMany 
   resources:
     requests:
-      storage: 5Gi  # Must be equal or less than the PV size
+      storage: 1Gi
