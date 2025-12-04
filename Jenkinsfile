@@ -98,7 +98,6 @@ pipeline {
                         kubectl delete service frontend --ignore-not-found
                         kubectl delete service backend  --ignore-not-found
                         kubectl delete service database --ignore-not-found
-                        kubectl delete pvc shared-pvc --ignore-not-found
                     """
                     // Apply new configurations
                     sh "kubectl apply -f k8s/"
