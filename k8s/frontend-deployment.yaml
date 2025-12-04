@@ -11,7 +11,7 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-  type: NodePort  # Expose externally via NodePort
+  type: NodePort
 
 ---
 # deployment
@@ -38,7 +38,7 @@ spec:
             - containerPort: 3000
           volumeMounts:
             - name: shared-storage
-              mountPath: /app/data  # Mount shared storage
+              mountPath: /app/data
       imagePullSecrets:
         - name: regcred
       volumes:
