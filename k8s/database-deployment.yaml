@@ -1,26 +1,26 @@
 # service
-
 apiVersion: v1
 kind: Service
 metadata:
   name: database
 spec:
+  clusterIP: None
   selector:
     app: database
   ports:
     - protocol: TCP
       port: 5432
-  type: ClusterIP
 
 ---
 # deployment
 
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: database
 spec:
-  replicas: 1
+  serviceName: "database"
+  replicas: 1  
   selector:
     matchLabels:
       app: database
@@ -42,10 +42,9 @@ spec:
             - name: POSTGRES_DB
               value: "usersdb"
           volumeMounts:
-            - name: shared-storage
-              mountPath: /var/lib/postgresql/data
+            - name: database-storage
+              mountPath: /var/lib/postgresql/data  
       volumes:
-        - name: shared-storage
+        - name: database-storage
           persistentVolumeClaim:
-            claimName: shared-pvc
-
+            claimName: shared-pvc 
