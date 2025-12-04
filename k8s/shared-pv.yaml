@@ -7,7 +7,7 @@ spec:
     storage: 5Gi  # You can adjust the size depending on your needs
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany  # Allow multiple pods to read/write
+    - ReadWriteOnce
   storageClassName: shared-storage  # Reference the StorageClass
   hostPath:
     path: /data/shared  # Path on the host machine
