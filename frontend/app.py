@@ -3,7 +3,7 @@ import requests
 
 API_URL = "http://backend:5000"
 
-st.title("Usersdata Management App")
+st.title("Users Management Application")
 
 with st.form("user_form"):
     name = st.text_input("Enter Name")
