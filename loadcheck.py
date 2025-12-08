@@ -1,6 +1,6 @@
 import requests
 import concurrent.futures
-URL = "http://10.131.103.92:4000"
+URL = "http://10.131.103.92:5000/users"
 def hit():
     try:
         r = requests.get(URL, timeout=5)

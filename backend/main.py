@@ -5,6 +5,14 @@ import os
 
 app = FastAPI()
 
+POD_NAME = os.getenv("HOSTNAME", "unknown")
+
+@app.middleware("http")
+async def add_pod_header(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Pod-Name"] = POD_NAME
+    return response
+
 # Environment variables (from deployment)
 DB_HOST = os.environ.get("DB_HOST", "database")
 DB_NAME = os.environ.get("DB_NAME", "usersdb")
