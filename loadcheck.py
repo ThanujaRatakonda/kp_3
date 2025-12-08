@@ -1,30 +1,37 @@
 import requests
-import concurrent.futures
+from concurrent.futures import ThreadPoolExecutor
 
-URL = "http://10.131.103.92:5000/users" 
+#  FRONTEND_URL = "http://10.131.103.92:4000"
+BACKEND_URL = "http://10.131.103.92:5000/users"
 
-def hit():
+def hit_frontend(_):
+    """Fire-and-forget request to frontend (like curl -s > /dev/null)."""
     try:
-        r = requests.get(URL, timeout=5)
-        return r.status_code, r.elapsed.total_seconds()
-    except Exception:
-        return "ERR", None
+        requests.get(FRONTEND_URL, timeout=10)
+    except:
+        pass
+
+def hit_backend(_):
+    """Request backend and print status, time, and pod handling the request."""
+    try:
+        r = requests.get(BACKEND_URL, timeout=10)
+        pod = r.headers.get("X-Pod-Name", "unknown")
+        print(f"status:{r.status_code},Time:{r.elapsed.total_seconds():.3f}s,Pod:{pod}")
+    except:
+        print(f"status:ERR,Time:N/A,Pod:N/A")
 
 def main():
-    total_requests = 500
-    print(f"Sending {total_requests} concurrent requests...")
+    total = int(input("Enter number of requests: "))
 
-    # ThreadPoolExecutor to run requests concurrently
-    with concurrent.futures.ThreadPoolExecutor(max_workers=500) as executor:
-        results = list(executor.map(lambda _: hit(), range(total_requests)))
+    # Frontend requests
+    print(f"Sending {total} fire-and-forget requests to frontend...")
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        list(executor.map(hit_frontend, range(total)))
 
-    success = sum(1 for r in results if r[0] == 200)
-    failed = sum(1 for r in results if r[0] != 200)
-
-    print("\n--- RESULT SUMMARY ---")
-    print(f"Success: {success}")
-    print(f"Failed: {failed}")
+    # Backend requests
+    print(f"\nSending {total} requests to backend (showing pod handling each request)...")
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        list(executor.map(hit_backend, range(total)))
 
 if __name__ == "__main__":
     main()
-
